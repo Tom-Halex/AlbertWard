@@ -66,38 +66,60 @@
 
         const dateSlider = document.getElementById('dateSlider');
         const dateLabel = document.getElementById('dateLabel');
-
-        const allFeatures = Destinations_2.getSource().getFeatures();
-        const originalStyles = new Map();
-
-        allFeatures.forEach(f => {
-            const style = f.getStyle ? f.getStyle() : null;
-            if (style) originalStyles.set(f, style);
+        
+        // Function to parse date in "dd/mm/yyyy" format to a JavaScript Date object
+        function parseDate(dateStr) {
+            const [day, month, year] = dateStr.split('/');
+            return new Date(`${year}-${month}-${day}`);
+        }
+        
+        // Map the "Arrival Da" values to Date objects for comparison
+        const allFeatures = Destinations_2.features;
+        const featureDates = allFeatures.map(feature => {
+            const arrivalDa = feature.properties['Arrival Da'];
+            return parseDate(arrivalDa);
         });
-
-        // Update features visibility based on the selected date
+        
+        // Slider value should be used to filter features
         function updateFeatures(index) {
-            const selectedDate = parsedDates[index];
-            dateLabel.textContent = `Up to: ${arrivalDates[index]}`;
-
-            allFeatures.forEach(feature => {
-                const arrival = feature.get('Arrival Da'); // 'Arrival Da' is your field name
-                const featureDate = parseDate(arrival);
+            const selectedDate = featureDates[index];
+            dateLabel.textContent = `Show points up to: ${featureDates[index].toLocaleDateString()}`;
+        
+            allFeatures.forEach((feature, idx) => {
+                const featureDate = featureDates[idx];
+                
                 if (featureDate <= selectedDate) {
-                    feature.setStyle(originalStyles.get(feature)); // Show feature
+                    // Show the feature
+                    feature.visible = true;
                 } else {
-                    feature.setStyle(null); // Hide feature
+                    // Hide the feature
+                    feature.visible = false;
+                }
+            });
+        
+            // Re-render the map
+            renderMap();
+        }
+        
+        // Render map function (you may need to modify how you handle feature visibility in your map library)
+        function renderMap() {
+            // Example: Re-render the map, showing only the features that are marked as visible
+            Destinations_2.features.forEach(feature => {
+                if (feature.visible) {
+                    // Show feature (adjust this for your map library)
+                    console.log("Showing feature:", feature.properties.Location);
+                } else {
+                    // Hide feature (adjust this for your map library)
+                    console.log("Hiding feature:", feature.properties.Location);
                 }
             });
         }
-
-        // When the slider value changes, update the map
+        
+        // Initialize slider event listener
         dateSlider.addEventListener('input', () => {
             updateFeatures(dateSlider.value);
         });
-
-        // Initialize the map to show the features based on the default slider value
+        
+        // Initial call to display features based on default slider value
         updateFeatures(dateSlider.value);
-    </script>
-</body>
-</html>
+
