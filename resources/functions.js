@@ -67,9 +67,9 @@ const parseDate = (dateStr) => {
 };
 
 const parsedDates = arrivalDates.map(parseDate);
-console.log(Destinations_2)
+console.log(json_Destinations_2)
 // Assuming you already have features in Destinations_2
-const allFeatures = Destinations_2.features;
+const allFeatures = json_Destinations_2.features;
 const featureDates = allFeatures.map(feature => {
     const arrivalDa = feature.properties['Arrival Da'];
     return parseDate(arrivalDa);
