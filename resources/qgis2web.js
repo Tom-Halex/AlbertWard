@@ -1035,3 +1035,4 @@ document.addEventListener('DOMContentLoaded', function() {
         bottomRightContainerDiv.appendChild(attributionControl);
     }
 
+console.log(map.getLayers().getArray());
