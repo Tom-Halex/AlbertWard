@@ -42,9 +42,30 @@
             margin: 0;
         }
         </style>
+        <style>
+        /* Additional styling for the slider */
+            #slider-container {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 1000;
+                background: white;
+                padding: 10px;
+                border-radius: 8px;
+            }
+            #dateLabel {
+                margin-top: 5px;
+                font-weight: bold;
+            }
+        </style>
         <title></title>
     </head>
     <body>
+        <div id="slider-container">
+            <label for="dateSlider">Show points up to:</label><br>
+            <input type="range" id="dateSlider" min="0" max="14" value="14">
+            <div id="dateLabel"></div>
+        </div>
         <div id="map">
             <div id="popup" class="ol-popup">
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
