@@ -54,3 +54,54 @@ function stripe(stripeWidth, gapWidth, angle, color) {
 
     return outerContext.createPattern(outerCanvas, 'no-repeat');
 };
+const arrivalDates = [
+    "28/01/1916", "15/03/1916", "01/04/1916", "20/04/1916", "10/05/1916",
+    "01/06/1916", "20/06/1916", "15/07/1916", "01/08/1916", "15/08/1916",
+    "01/09/1916", "20/09/1916", "01/10/1916", "15/10/1916", "01/11/1916"
+];
+
+// Convert date strings to Date objects for comparison
+const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr.split('/');
+    return new Date(`${year}-${month}-${day}`);
+};
+
+const parsedDates = arrivalDates.map(parseDate);
+
+// Assuming you already have features in Destinations_2
+const allFeatures = Destinations_2.features;
+const featureDates = allFeatures.map(feature => {
+    const arrivalDa = feature.properties['Arrival Da'];
+    return parseDate(arrivalDa);
+});
+
+// Initialize the slider and label
+const dateSlider = document.getElementById('dateSlider');
+const dateLabel = document.getElementById('dateLabel');
+
+// Function to update map features visibility based on slider value
+function updateFeatures(index) {
+    const selectedDate = parsedDates[index];
+    dateLabel.textContent = `Show points up to: ${selectedDate.toLocaleDateString()}`;
+
+    allFeatures.forEach((feature, idx) => {
+        const featureDate = featureDates[idx];
+
+        if (featureDate <= selectedDate) {
+            feature.set('visible', true);  // Show feature
+        } else {
+            feature.set('visible', false);  // Hide feature
+        }
+    });
+
+    // Re-render map to apply visibility changes
+    map.render();
+}
+
+// Slider event listener to update features
+dateSlider.addEventListener('input', () => {
+    updateFeatures(dateSlider.value);
+});
+
+// Initial call to display features based on default slider value
+updateFeatures(dateSlider.value);
