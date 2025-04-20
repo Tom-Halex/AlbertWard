@@ -67,12 +67,6 @@
         const dateSlider = document.getElementById('dateSlider');
         const dateLabel = document.getElementById('dateLabel');
         
-        // Function to parse date in "dd/mm/yyyy" format to a JavaScript Date object
-        function parseDate(dateStr) {
-            const [day, month, year] = dateStr.split('/');
-            return new Date(`${year}-${month}-${day}`);
-        }
-        
         // Map the "Arrival Da" values to Date objects for comparison
         const allFeatures = Destinations_2.features;
         const featureDates = allFeatures.map(feature => {
@@ -80,39 +74,31 @@
             return parseDate(arrivalDa);
         });
         
-        // Slider value should be used to filter features
+        // Function to filter and update features based on selected date
         function updateFeatures(index) {
-            const selectedDate = featureDates[index];
-            dateLabel.textContent = `Show points up to: ${featureDates[index].toLocaleDateString()}`;
+            const selectedDate = parsedDates[index];
+            dateLabel.textContent = `Show points up to: ${selectedDate.toLocaleDateString()}`;
         
-            allFeatures.forEach((feature, idx) => {
-                const featureDate = featureDates[idx];
-                
-                if (featureDate <= selectedDate) {
-                    // Show the feature
-                    feature.visible = true;
-                } else {
-                    // Hide the feature
-                    feature.visible = false;
-                }
+            // Filter features based on the selected date
+            const filteredFeatures = allFeatures.filter((feature, idx) => {
+                return featureDates[idx] <= selectedDate;
             });
-        
-            // Re-render the map
-            renderMap();
+
+            // Update the map with the filtered features
+            updateMap(filteredFeatures);
         }
-        
-        // Render map function (you may need to modify how you handle feature visibility in your map library)
-        function renderMap() {
-            // Example: Re-render the map, showing only the features that are marked as visible
-            Destinations_2.features.forEach(feature => {
-                if (feature.visible) {
-                    // Show feature (adjust this for your map library)
-                    console.log("Showing feature:", feature.properties.Location);
-                } else {
-                    // Hide feature (adjust this for your map library)
-                    console.log("Hiding feature:", feature.properties.Location);
-                }
-            });
+
+        // Function to update the map (you need to implement the actual map logic)
+        function updateMap(filteredFeatures) {
+            // Here, you would need to update the visibility of the features on your map
+            // For example, in OpenLayers or Leaflet, you would modify the layer to display only the filtered features
+            console.log("Filtered Features:", filteredFeatures);
+
+            // Replace the map's layer with the filtered features or update its visibility
+            // This is just a placeholder; actual implementation depends on your map library
+            // Example for OpenLayers:
+            // mapLayer.getSource().clear();
+            // mapLayer.getSource().addFeatures(filteredFeatures);
         }
         
         // Initialize slider event listener
@@ -120,6 +106,8 @@
             updateFeatures(dateSlider.value);
         });
         
-        // Initial call to display features based on default slider value
+        // Initial call to display features based on the default slider value
         updateFeatures(dateSlider.value);
-
+    </script>
+</body>
+</html>
