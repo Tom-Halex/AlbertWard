@@ -86,7 +86,7 @@ function updateFeatures(index) {
 
     allFeatures.forEach((feature, idx) => {
         const featureDate = featureDates[idx];
-
+        console.log(feature.properties['Arrival Da'], featureDate);
         if (featureDate <= selectedDate) {
             feature.set('visible', true);  // Show feature
         } else {
