@@ -1036,3 +1036,4 @@ document.addEventListener('DOMContentLoaded', function() {
     if (attributionControl) {
         bottomRightContainerDiv.appendChild(attributionControl);
     }
+console.log(map.getLayers().getArray());
