@@ -45,8 +45,11 @@
         <title></title>
     </head>
     <body>
-        <input type="range" id="dateSlider" min="1915-01-01" max="1916-12-31" value="1915-01-01" step="1">
-        <p id="sliderDate">Showing destinations up to: 1915-01-01</p>
+        <div style="position: absolute; top: 10px; left: 10px; z-index: 1000; background: rgba(255,255,255,0.8); padding: 8px; border-radius: 4px;">
+            <input type="date" id="dateSlider" min="1915-01-01" max="1916-12-31" value="1915-01-01">
+            <p id="sliderDate" style="margin: 5px 0 0;">Showing destinations up to: 1915-01-01</p>
+        </div>
+
 
         <div id="map">
             <div id="popup" class="ol-popup">
