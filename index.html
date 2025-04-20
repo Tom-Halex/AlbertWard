@@ -53,7 +53,7 @@
     <div id="slider-container" style="position:absolute; top:10px; left:10px; z-index:1000; background:white; padding:10px; border-radius:8px;">
         <label for="dateSlider">Show points up to:</label><br>
         <input type="range" id="dateSlider" min="0" max="14" value="14">
-        <div id="dateLabel" style="margin-top:5px;"></div>
+        <div id="dateLabel" style="margin-top:5px; font-weight:bold;"></div>
     </div>
 
     <!-- Scripts -->
@@ -99,12 +99,12 @@
             dateLabel.textContent = `Up to: ${arrivalDates[index]}`;
 
             allFeatures.forEach(feature => {
-                const arrival = feature.get('arrival');
+                const arrival = feature.get('Arrival Da'); // ← FIXED FIELD NAME HERE
                 const featureDate = parseDate(arrival);
                 if (featureDate <= selectedDate) {
                     feature.setStyle(originalStyles.get(feature));
                 } else {
-                    feature.setStyle(null);
+                    feature.setStyle(null); // hide
                 }
             });
         }
