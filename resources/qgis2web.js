@@ -33,28 +33,54 @@ function parseFeatureDate(dateStr) {
 }
 
 // Get all features
+// Get features from destination layer
 const allDestinationFeatures = destinationsSource.getFeatures();
 
-// Hook into slider
+// Get DOM elements
 const slider = document.getElementById('dateSlider');
 const sliderDateDisplay = document.getElementById('sliderDate');
 
+// Base start date
+const startDate = new Date("1915-01-01");
+
+// Converts slider value (number) into real date
+function getDateFromSliderValue(value) {
+    const newDate = new Date(startDate);
+    newDate.setDate(startDate.getDate() + parseInt(value));
+    return newDate;
+}
+
+function formatDateToString(date) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+// Date parsing helper for features
+function parseFeatureDate(dateStr) {
+    const parts = dateStr.split('/');
+    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+}
+
+// Hook up slider to filtering logic
 slider.addEventListener('input', () => {
-    const selectedDate = new Date(slider.value);
-    sliderDateDisplay.textContent = `Showing destinations up to: ${slider.value}`;
+    const selectedDate = getDateFromSliderValue(slider.value);
+    const formatted = formatDateToString(selectedDate);
+    sliderDateDisplay.textContent = `Showing destinations up to: ${formatted}`;
 
     allDestinationFeatures.forEach((feature) => {
         const arrivalDateStr = feature.get('Arrival Da');
         if (!arrivalDateStr || arrivalDateStr === '—' || arrivalDateStr === 'N/A') {
-            feature.setStyle(null); // Default style
+            feature.setStyle(null); // Show by default
             return;
         }
 
         const featureDate = parseFeatureDate(arrivalDateStr);
         if (featureDate <= selectedDate) {
-            feature.setStyle(null); // Default style
+            feature.setStyle(null); // Show
         } else {
-            feature.setStyle(new ol.style.Style(null)); // Hides feature
+            feature.setStyle(new ol.style.Style(null)); // Hide
         }
     });
 });
