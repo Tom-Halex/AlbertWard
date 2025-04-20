@@ -101,7 +101,12 @@ slider.addEventListener('input', () => {
         if (featureDate <= selectedDate) {
             feature.setStyle(null); // Show
         } else {
-            feature.setStyle(new ol.style.Style(null)); // Hide
+            // Hide the feature entirely by setting its style to "zero-sized" circle
+            feature.setStyle(new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 0, // Effectively hides the feature (zero-sized circle)
+                })
+            }));
         }
     });
 });
