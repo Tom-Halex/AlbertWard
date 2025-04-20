@@ -8,20 +8,16 @@ var map = new ol.Map({
     })
 });
 // Create the destinations source (add this right after the map initialization)
-var destinationsSource = new ol.source.Vector({
-    features: (new ol.format.GeoJSON()).readFeatures(json_Destinations_2)  // Destinations_2 is your GeoJSON data
+const destinationsSource = new ol.source.Vector({
+    features: new ol.format.GeoJSON().readFeatures(json_Destinations_2, {
+        featureProjection: 'EPSG:3857' // Important for correct display
+    })
 });
 
 // Create a vector layer for Destinations_2
-var destinationsLayer = new ol.layer.Vector({
+const destinationsLayer = new ol.layer.Vector({
     source: destinationsSource,
-    style: new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 5,
-            fill: new ol.style.Fill({ color: 'blue' }),
-            stroke: new ol.style.Stroke({ color: 'white', width: 1 })
-        })
-    })
+    style: defaultStyle
 });
 
 // Add the Destinations layer to the map
