@@ -9,7 +9,7 @@ var map = new ol.Map({
 });
 // Create the destinations source (add this right after the map initialization)
 var destinationsSource = new ol.source.Vector({
-    features: (new ol.format.GeoJSON()).readFeatures(Destinations_2)  // Destinations_2 is your GeoJSON data
+    features: (new ol.format.GeoJSON()).readFeatures(json_Destinations_2)  // Destinations_2 is your GeoJSON data
 });
 
 // Create a vector layer for Destinations_2
