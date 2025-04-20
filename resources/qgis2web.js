@@ -36,6 +36,27 @@ function parseFeatureDate(dateStr) {
 // Get features from destination layer
 const allDestinationFeatures = destinationsSource.getFeatures();
 
+const startDate = new Date("1915-01-01");
+
+// Calculate the end date
+const endDate = new Date("1916-12-31");
+
+// Function to convert slider value to a date
+function getDateFromSliderValue(value) {
+    const newDate = new Date(startDate);
+    newDate.setDate(startDate.getDate() + parseInt(value)); // Add days based on slider value
+    return newDate;
+}
+
+// Function to format the date as YYYY-MM-DD
+function formatDateToString(date) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+}
+
+
 // Get DOM elements
 const slider = document.getElementById('dateSlider');
 const sliderDateDisplay = document.getElementById('sliderDate');
