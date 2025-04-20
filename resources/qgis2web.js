@@ -7,6 +7,24 @@ var map = new ol.Map({
          maxZoom: 28, minZoom: 1
     })
 });
+const destinationsSource = new ol.source.Vector({
+    features: new ol.format.GeoJSON().readFeatures(json_Destinations_2, {
+        featureProjection: 'EPSG:3857'
+    })
+});
+
+const destinationsLayer = new ol.layer.Vector({
+    source: destinationsSource,
+    style: new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({ color: 'blue' }),
+            stroke: new ol.style.Stroke({ color: 'white', width: 1 })
+        })
+    })
+});
+
+map.addLayer(destinationsLayer);
 
 //initial view - epsg:3857 coordinates if not "Match project CRS"
 map.getView().fit([1158246.744983, 2352878.876312, 5931181.638097, 5600100.061333], map.getSize());
