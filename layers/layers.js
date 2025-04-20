@@ -46,11 +46,11 @@ var lyr_Destinations_2 = new ol.layer.Vector({
 lyr_ESRIShadedRelief_0.setVisible(true);lyr_Paths_1.setVisible(true);lyr_Destinations_2.setVisible(true);
 var layersList = [lyr_ESRIShadedRelief_0,lyr_Paths_1,lyr_Destinations_2];
 lyr_Paths_1.set('fieldAliases', {'begin': 'begin', 'end': 'end', 'To': 'To', 'From': 'From', 'type': 'type', });
-lyr_Destinations_2.set('fieldAliases', {'Location': 'Location', 'Latitude': 'Latitude', 'Longitude': 'Longitude', 'Arrival Da': 'Arrival Da', 'Departure': 'Departure', 'Order': 'Order', });
+lyr_Destinations_2.set('fieldAliases', {'Location': 'Location', 'Latitude': 'Latitude', 'Longitude': 'Longitude', 'Arrival Da': 'Arrival Da', 'Departure': 'Departure', 'Images': 'Images', });
 lyr_Paths_1.set('fieldImages', {'begin': 'TextEdit', 'end': 'TextEdit', 'To': 'TextEdit', 'From': 'TextEdit', 'type': 'TextEdit', });
-lyr_Destinations_2.set('fieldImages', {'Location': 'TextEdit', 'Latitude': 'TextEdit', 'Longitude': 'TextEdit', 'Arrival Da': 'TextEdit', 'Departure': 'TextEdit', 'Order': 'TextEdit', });
+lyr_Destinations_2.set('fieldImages', {'Location': 'TextEdit', 'Latitude': 'TextEdit', 'Longitude': 'TextEdit', 'Arrival Da': 'TextEdit', 'Departure': 'TextEdit', 'Images': '', });
 lyr_Paths_1.set('fieldLabels', {'begin': 'no label', 'end': 'no label', 'To': 'no label', 'From': 'no label', 'type': 'no label', });
-lyr_Destinations_2.set('fieldLabels', {'Location': 'inline label - visible with data', 'Latitude': 'hidden field', 'Longitude': 'hidden field', 'Arrival Da': 'inline label - visible with data', 'Departure': 'inline label - visible with data', 'Order': 'hidden field', });
+lyr_Destinations_2.set('fieldLabels', {'Location': 'inline label - visible with data', 'Latitude': 'hidden field', 'Longitude': 'hidden field', 'Arrival Da': 'inline label - visible with data', 'Departure': 'inline label - visible with data', 'Images': 'header label - visible with data', });
 lyr_Destinations_2.on('precompose', function(evt) {
     evt.context.globalCompositeOperation = 'normal';
 });
