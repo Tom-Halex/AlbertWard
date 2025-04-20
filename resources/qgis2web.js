@@ -57,6 +57,12 @@ map.getView().fit([1158246.744983, 2352878.876312, 5931181.638097, 5600100.06133
     });
     map.addControl(bottomRightContainer)
 
+    var scaleLineControl = new ol.control.ScaleLine({
+    	target: document.getElementById('bottom-left-container'),
+    	units: 'metric' // or 'imperial', 'nautical', etc.
+    });
+    map.addControl(scaleLineControl);	
+
 //popup
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
