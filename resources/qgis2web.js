@@ -7,60 +7,7 @@ var map = new ol.Map({
          maxZoom: 28, minZoom: 1
     })
 });
-// Create the destinations source (add this right after the map initialization)
-const destinationsSource = new ol.source.Vector({
-    features: new ol.format.GeoJSON().readFeatures(json_Destinations_2, {
-        featureProjection: 'EPSG:3857' // Important for correct display
-    })
-});
 
-// Create a vector layer for Destinations_2
-const destinationsLayer = new ol.layer.Vector({
-    source: destinationsSource,
-    style: defaultStyle
-});
-
-// Add the Destinations layer to the map
-map.addLayer(destinationsLayer);
-
-var sliderElement = document.createElement('input');
-sliderElement.type = 'range';
-sliderElement.min = 0;
-sliderElement.max = 100;  // Set max value based on the number of features or date range
-sliderElement.value = 0;
-
-// Add the slider to the map (for example, using the top-right container)
-var sliderControl = new ol.control.Control({
-    element: sliderElement
-});
-map.addControl(sliderControl);
-
-// Function to filter features based on the slider
-sliderElement.addEventListener('input', function () {
-    var value = sliderElement.value;
-    
-    // Iterate through all features and filter based on the slider value
-    destinationsSource.forEachFeature(function (feature) {
-        var arrivalDate = feature.get('Arrival Da');
-        // Assuming arrivalDate is a string in "dd/mm/yyyy" format
-        var dateParts = arrivalDate.split('/');
-        var featureDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-
-        // Filter based on date or any other condition with the slider
-        if (featureDate.getFullYear() <= value) {
-            feature.setStyle(new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 5,
-                    fill: new ol.style.Fill({ color: 'green' }),
-                    stroke: new ol.style.Stroke({ color: 'white', width: 1 })
-                })
-            }));
-            feature.set('visible', true);
-        } else {
-            feature.set('visible', false);
-        }
-    });
-});
 //initial view - epsg:3857 coordinates if not "Match project CRS"
 map.getView().fit([1158246.744983, 2352878.876312, 5931181.638097, 5600100.061333], map.getSize());
 
@@ -109,12 +56,6 @@ map.getView().fit([1158246.744983, 2352878.876312, 5931181.638097, 5600100.06133
         })(),
     });
     map.addControl(bottomRightContainer)
-
-    var scaleLineControl = new ol.control.ScaleLine({
-    	target: document.getElementById('bottom-left-container'),
-    	units: 'metric' // or 'imperial', 'nautical', etc.
-    });
-    map.addControl(scaleLineControl);	
 
 //popup
 var container = document.getElementById('popup');
