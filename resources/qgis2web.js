@@ -26,6 +26,39 @@ const destinationsLayer = new ol.layer.Vector({
 
 map.addLayer(destinationsLayer);
 
+// Parse date from feature
+function parseFeatureDate(dateStr) {
+    const parts = dateStr.split('/');
+    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+}
+
+// Get all features
+const allDestinationFeatures = destinationsSource.getFeatures();
+
+// Hook into slider
+const slider = document.getElementById('dateSlider');
+const sliderDateDisplay = document.getElementById('sliderDate');
+
+slider.addEventListener('input', () => {
+    const selectedDate = new Date(slider.value);
+    sliderDateDisplay.textContent = `Showing destinations up to: ${slider.value}`;
+
+    allDestinationFeatures.forEach((feature) => {
+        const arrivalDateStr = feature.get('Arrival Da');
+        if (!arrivalDateStr || arrivalDateStr === '—' || arrivalDateStr === 'N/A') {
+            feature.setStyle(null); // Default style
+            return;
+        }
+
+        const featureDate = parseFeatureDate(arrivalDateStr);
+        if (featureDate <= selectedDate) {
+            feature.setStyle(null); // Default style
+        } else {
+            feature.setStyle(new ol.style.Style(null)); // Hides feature
+        }
+    });
+});
+
 //initial view - epsg:3857 coordinates if not "Match project CRS"
 map.getView().fit([1158246.744983, 2352878.876312, 5931181.638097, 5600100.061333], map.getSize());
 
