@@ -1,113 +1,64 @@
 <!doctype html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="./resources/ol.css">
-    <link rel="stylesheet" href="resources/fontawesome-all.min.css">
-    <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
-    <link rel="stylesheet" href="./resources/qgis2web.css">
-    <style>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="./resources/ol.css">
+        <link rel="stylesheet" href="resources/fontawesome-all.min.css">
+        <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
+        <link rel="stylesheet" href="./resources/qgis2web.css">
+        <style>
         html, body {
             background-color: #ffffff;
         }
+        .ol-control > * {
+            background-color: #f8f8f8!important;
+            color: #444444!important;
+            border-radius: 0px;
+        }
+        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+            color: #444444!important;
+        }
+        .search-layer-input-search {
+            background-color: #f8f8f8!important;
+        }
+        .ol-control > *:focus, .ol-control >*:hover {
+            background-color: rgba(248, 248, 248, 0.7)!important;
+        } 
+        .ol-control {
+            background-color: rgba(255,255,255,.4) !important;
+            padding: 2px !important;
+        } 
+        </style>
+
+        <style>
         html, body, #map {
             width: 100%;
             height: 100%;
             padding: 0;
             margin: 0;
         }
-    </style>
-    <title>WW1 Soldier Map</title>
-</head>
-<body>
-    <div id="map">
-        <div id="popup" class="ol-popup">
-            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-            <div id="popup-content"></div>
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+            <div id="popup" class="ol-popup">
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content"></div>
+            </div>
         </div>
-    </div>
-
-    <!-- Time Slider UI -->
-    <div id="slider-container" style="position:absolute; top:10px; left:10px; z-index:1000; background:white; padding:10px; border-radius:8px;">
-        <label for="dateSlider">Show points up to:</label><br>
-        <input type="range" id="dateSlider" min="0" max="14" value="14">
-        <div id="dateLabel" style="margin-top:5px; font-weight:bold;"></div>
-    </div>
-
-    <script src="resources/qgis2web_expressions.js"></script>
-    <script src="./resources/functions.js"></script>
-    <script src="./resources/ol.js"></script>
-    <script src="./resources/ol-layerswitcher.js"></script>
-    <script src="layers/Paths_1.js"></script><script src="layers/Destinations_2.js"></script>
-    <script src="styles/Paths_1_style.js"></script><script src="styles/Destinations_2_style.js"></script>
-    <script src="./layers/layers.js" type="text/javascript"></script> 
-    <script src="./resources/Autolinker.min.js"></script>
-    <script src="./resources/qgis2web.js"></script>
-
-    <!-- Time Slider Logic -->
-    <script>
-        const arrivalDates = [
-            "28/01/1916", "15/03/1916", "01/04/1916", "20/04/1916", "10/05/1916",
-            "01/06/1916", "20/06/1916", "15/07/1916", "01/08/1916", "15/08/1916",
-            "01/09/1916", "20/09/1916", "01/10/1916", "15/10/1916", "01/11/1916"
-        ];
-
-        // Convert date strings to Date objects for comparison
-        const parseDate = (dateStr) => {
-            const [day, month, year] = dateStr.split('/');
-            return new Date(`${year}-${month}-${day}`);
-        };
-
-        const parsedDates = arrivalDates.map(parseDate);
-
-        const dateSlider = document.getElementById('dateSlider');
-        const dateLabel = document.getElementById('dateLabel');
-        
-        // Map the "Arrival Da" values to Date objects for comparison
-        const allFeatures = Destinations_2.features;
-        const featureDates = allFeatures.map(feature => {
-            const arrivalDa = feature.properties['Arrival Da'];
-            return parseDate(arrivalDa);
-        });
-        
-        // Function to filter and update features based on selected date
-        function updateFeatures(index) {
-            const selectedDate = parsedDates[index];
-            dateLabel.textContent = `Show points up to: ${selectedDate.toLocaleDateString()}`;
-        
-            // Filter features based on the selected date
-            const filteredFeatures = allFeatures.filter((feature, idx) => {
-                return featureDates[idx] <= selectedDate;
-            });
-
-            // Update the map with the filtered features
-            updateMap(filteredFeatures);
-        }
-
-        // Function to update the map (you need to implement the actual map logic)
-        function updateMap(filteredFeatures) {
-            // Here, you would need to update the visibility of the features on your map
-            // For example, in OpenLayers or Leaflet, you would modify the layer to display only the filtered features
-            console.log("Filtered Features:", filteredFeatures);
-
-            // Replace the map's layer with the filtered features or update its visibility
-            // This is just a placeholder; actual implementation depends on your map library
-            // Example for OpenLayers:
-            // mapLayer.getSource().clear();
-            // mapLayer.getSource().addFeatures(filteredFeatures);
-        }
-        
-        // Initialize slider event listener
-        dateSlider.addEventListener('input', () => {
-            updateFeatures(dateSlider.value);
-        });
-        
-        // Initial call to display features based on the default slider value
-        updateFeatures(dateSlider.value);
-    </script>
-</body>
+        <script src="resources/qgis2web_expressions.js"></script>
+        <script src="./resources/functions.js"></script>
+        <script src="./resources/ol.js"></script>
+        <script src="./resources/ol-layerswitcher.js"></script>
+        <script src="layers/Paths_1.js"></script><script src="layers/Destinations_2.js"></script>
+        <script src="styles/Paths_1_style.js"></script><script src="styles/Destinations_2_style.js"></script>
+        <script src="./layers/layers.js" type="text/javascript"></script> 
+        <script src="./resources/Autolinker.min.js"></script>
+        <script src="./resources/qgis2web.js"></script>
+    </body>
 </html>
