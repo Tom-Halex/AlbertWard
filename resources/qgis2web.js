@@ -61,8 +61,6 @@ function formatDateToString(date) {
 const slider = document.getElementById('dateSlider');
 const sliderDateDisplay = document.getElementById('sliderDate');
 
-// Base start date
-const startDate = new Date("1915-01-01");
 
 // Converts slider value (number) into real date
 function getDateFromSliderValue(value) {
