@@ -7,24 +7,7 @@ var map = new ol.Map({
          maxZoom: 28, minZoom: 1
     })
 });
-const destinationsSource = new ol.source.Vector({
-    features: new ol.format.GeoJSON().readFeatures(json_Destinations_2, {
-        featureProjection: 'EPSG:3857'
-    })
-});
 
-const destinationsLayer = new ol.layer.Vector({
-    source: destinationsSource,
-    style: new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 6,
-            fill: new ol.style.Fill({ color: 'blue' }),
-            stroke: new ol.style.Stroke({ color: 'white', width: 1 })
-        })
-    })
-});
-
-map.addLayer(destinationsLayer);
 
 // Parse date from feature
 function parseFeatureDate(dateStr) {
@@ -32,37 +15,11 @@ function parseFeatureDate(dateStr) {
     return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
 }
 
-// Get all features
-// Get features from destination layer
-const allDestinationFeatures = destinationsSource.getFeatures();
-
-const startDate = new Date("1915-01-01");
-
-// Calculate the end date
+// Start and end date range
+const startDate = new Date("1915-09-19");
 const endDate = new Date("1916-12-31");
 
-// Function to convert slider value to a date
-function getDateFromSliderValue(value) {
-    const newDate = new Date(startDate);
-    newDate.setDate(startDate.getDate() + parseInt(value)); // Add days based on slider value
-    return newDate;
-}
-
-// Function to format the date as YYYY-MM-DD
-function formatDateToString(date) {
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-}
-
-
-// Get DOM elements
-const slider = document.getElementById('dateSlider');
-const sliderDateDisplay = document.getElementById('sliderDate');
-
-
-// Converts slider value (number) into real date
+// Converts slider value (number of days since start) to actual date
 function getDateFromSliderValue(value) {
     const newDate = new Date(startDate);
     newDate.setDate(startDate.getDate() + parseInt(value));
@@ -76,13 +33,12 @@ function formatDateToString(date) {
     return `${yyyy}-${mm}-${dd}`;
 }
 
-// Date parsing helper for features
-function parseFeatureDate(dateStr) {
-    const parts = dateStr.split('/');
-    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-}
+const slider = document.getElementById('dateSlider');
+const sliderDateDisplay = document.getElementById('sliderDate');
 
-// Hook up slider to filtering logic
+// 👇 Use existing features from QGIS2Web's source
+const allDestinationFeatures = jsonSource_Destinations_2.getFeatures();
+
 slider.addEventListener('input', () => {
     const selectedDate = getDateFromSliderValue(slider.value);
     const formatted = formatDateToString(selectedDate);
@@ -91,18 +47,19 @@ slider.addEventListener('input', () => {
     allDestinationFeatures.forEach((feature) => {
         const arrivalDateStr = feature.get('Arrival Da');
         if (!arrivalDateStr || arrivalDateStr === '—' || arrivalDateStr === 'N/A') {
-            feature.setStyle(null); // Show by default
+            feature.setStyle(null); // Default style
             return;
         }
 
         const featureDate = parseFeatureDate(arrivalDateStr);
+
+        // Show or hide based on date
         if (featureDate <= selectedDate) {
-            feature.setStyle(null); // Show
+            feature.setStyle(null); // Show normally
         } else {
-            // Hide the feature entirely by setting its style to "zero-sized" circle
             feature.setStyle(new ol.style.Style({
                 image: new ol.style.Circle({
-                    radius: 0, // Effectively hides the feature (zero-sized circle)
+                    radius: 0 // Effectively hides it
                 })
             }));
         }
@@ -1035,4 +992,6 @@ document.addEventListener('DOMContentLoaded', function() {
         bottomRightContainerDiv.appendChild(attributionControl);
     }
 
-console.log(map.getLayers().getArray());
+map.once('postrender', function() {
+    console.log(map.getLayers().getArray()); // This will now log the layers array
+});
