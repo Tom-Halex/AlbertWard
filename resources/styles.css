@@ -1,0 +1,42 @@
+<head>
+    <style>
+        /* Adjust the position of the labels */
+        input[type="range"] {
+            position: relative;
+            width: 100%;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            height: 20px;
+            width: 20px;
+            background: #007bff;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+
+        input[type="range"]:focus {
+            outline: none;
+        }
+
+        /* Display labels below the slider */
+        datalist {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        /* Ensure the labels for the tickmarks are properly spaced */
+        datalist option {
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            width: 16%;
+        }
+    </style>
+</head>

@@ -8,6 +8,7 @@ var map = new ol.Map({
     })
 });
 
+const allPathFeatures = jsonSource_Paths_1.getFeatures();
 
 // Parse date from feature
 function parseFeatureDate(dateStr) {
@@ -62,6 +63,21 @@ slider.addEventListener('input', () => {
                     radius: 0 // Effectively hides it
                 })
             }));
+        }
+    });
+    // Filter Paths
+    allPathFeatures.forEach((feature) => {
+        const arrivalDateStr = feature.get('Arrival Da');
+        if (!arrivalDateStr || arrivalDateStr === '—' || arrivalDateStr === 'N/A') {
+            feature.setStyle(null);
+            return;
+        }
+
+        const featureDate = parseFeatureDate(arrivalDateStr);
+        if (featureDate <= selectedDate) {
+            feature.setStyle(null); // Show
+        } else {
+            feature.setStyle(new ol.style.Style({})); // Hide
         }
     });
 });
