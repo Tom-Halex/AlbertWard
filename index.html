@@ -43,6 +43,25 @@
             margin: 0;
         }
         </style>
+	<style>
+	#aboutButton {
+   		position: absolute;
+    		top: 10px;
+    		right: 10px;
+    		background-color: rgba(255, 255, 255, 0.9);
+    		padding: 8px 12px;
+    		border-radius: 4px;
+   		 text-decoration: none;
+    		color: #333;
+    		font-weight: bold;
+    		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    		z-index: 1001;
+    		transition: background 0.3s ease;
+	}
+	#aboutButton:hover {
+   	 	background-color: #e0e0e0;
+	}
+	</style>
         <title></title>
     </head>
     <body>
@@ -56,6 +75,12 @@
     	    </datalist>
             <p id="sliderDate" style="margin: 5px 0 0;">Choose Temporal Range</p>
         </div>
+	<div id="aboutModal" style="display:none; position: fixed; top: 80%; left: 50%; transform: translateX(-50%);
+   	 	 background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; z-index: 2000;">
+    		<h2>About This Map</h2>
+    		<p>This interactive map shows the journey of XYZ between 1915 and 1916.</p>
+    		<button onclick="document.getElementById('aboutModal').style.display='none'">Close</button>
+	</div>
 
 
         <div id="map">
@@ -73,5 +98,17 @@
         <script src="./layers/layers.js" type="text/javascript"></script> 
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
+	<button id="aboutBtn" style="position: absolute; bottom: 10px; left: 10px; z-index: 1001;">
+ 	   About
+	</button>
+
+		<script>
+    		document.getElementById('aboutBtn').addEventListener('click', () => {
+       		 document.getElementById('aboutModal').style.display = 'block';
+   		 });
+		</script>
+	<a href="about.html" target="_blank" style="position: absolute; bottom: 10px; left: 10px; z-index: 1001; background: white; 			padding: 5px 10px; border-radius: 4px; text-decoration: none; color: black;">
+   		 About
+	</a>
     </body>
 </html>
